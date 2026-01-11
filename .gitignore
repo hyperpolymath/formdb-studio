@@ -1,0 +1,24 @@
+# Build artifacts
+/dist
+/build
+/target
+
+# Tauri
+/src-tauri/target
+
+# ReScript
+*.res.js
+lib/
+.bsb.lock
+
+# Deno
+deno.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

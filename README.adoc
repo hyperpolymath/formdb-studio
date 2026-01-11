@@ -1,0 +1,269 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+= FormDB Studio
+:toc: macro
+:toc-title: Contents
+:toclevels: 3
+:icons: font
+
+image:https://img.shields.io/badge/License-AGPL--3.0-blue.svg[AGPL-3.0,link="https://opensource.org/licenses/AGPL-3.0"]
+image:https://img.shields.io/badge/Stage-Development-orange.svg[Stage]
+
+[.lead]
+*Zero-friction interface for FormDB with dependently-typed FQL.*
+
+Making verified, audit-grade databases accessible to everyone—even Apple users.
+
+toc::[]
+
+== Overview
+
+FormDB Studio is a graphical interface that lets non-technical users create and query FormDB databases using FQLdt (dependently-typed Form Query Language) without needing to understand dependent types, proofs, or Lean 4.
+
+=== The Problem
+
+FQLdt provides compile-time verification of database constraints:
+
+[source,fql]
+----
+-- FQLdt: Requires understanding dependent types
+CREATE COLLECTION evidence (
+  prompt_score : BoundedNat 0 100,  -- Type carries proof
+  rationale : NonEmptyString        -- Can't be empty
+) WITH DEPENDENT_TYPES;
+
+INSERT INTO evidence (prompt_score, rationale)
+VALUES (95, 'ONS official data')
+WITH_PROOF { score_valid: by omega };  -- What's omega?!
+----
+
+**Problem**: Most users don't know what `BoundedNat`, `WITH_PROOF`, or `omega` mean.
+
+=== The Solution
+
+FormDB Studio provides a visual interface:
+
+[source,text]
+----
+┌─────────────────────────────────────────────────────────────┐
+│  FormDB Studio                                    [_][□][×] │
+├─────────────────────────────────────────────────────────────┤
+│  📁 New Collection                                          │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │ Name: evidence                                        │  │
+│  ├───────────────────────────────────────────────────────┤  │
+│  │ Fields:                                               │  │
+│  │  ┌─────────────┬──────────────┬─────────────────────┐ │  │
+│  │  │ Name        │ Type         │ Constraints         │ │  │
+│  │  ├─────────────┼──────────────┼─────────────────────┤ │  │
+│  │  │ prompt_score│ Number ▼     │ [✓] Min: 0  Max: 100│ │  │
+│  │  │ rationale   │ Text ▼       │ [✓] Required        │ │  │
+│  │  └─────────────┴──────────────┴─────────────────────┘ │  │
+│  │                                                       │  │
+│  │  [+ Add Field]                                        │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                                                             │
+│  [Create Collection]                                        │
+│                                                             │
+│  ✓ Types verified • All constraints will be checked at     │
+│    compile time, not runtime                                │
+└─────────────────────────────────────────────────────────────┘
+----
+
+**Behind the scenes**: Studio generates FQLdt with proofs automatically.
+
+== Architecture
+
+[source,text]
+----
+┌─────────────────────────────────────────────────────────────┐
+│  FormDB Studio (This Project)                               │
+│  ├── Tauri 2.0 (Rust) - Cross-platform desktop app          │
+│  ├── ReScript UI - Type-safe reactive interface             │
+│  └── Visual builders for schemas, queries, data entry       │
+├─────────────────────────────────────────────────────────────┤
+│  FQLdt (github.com/hyperpolymath/fqldt)                     │
+│  ├── Lean 4 type checker                                    │
+│  ├── Proof generation                                       │
+│  └── FQL code generation                                    │
+├─────────────────────────────────────────────────────────────┤
+│  FormDB (github.com/hyperpolymath/formdb)                   │
+│  ├── Form.Bridge (Zig) - Bidirectional ABI                  │
+│  ├── Form.Model (Forth) - Multi-model layer                 │
+│  └── Form.Blocks (Forth) - Storage + journal                │
+└─────────────────────────────────────────────────────────────┘
+----
+
+== Features
+
+=== Schema Builder
+
+Visual interface for creating collections:
+
+* Drag-and-drop field ordering
+* Type picker with constraint helpers
+* PROMPT score templates for journalism
+* Automatic proof generation
+
+=== Query Builder
+
+Visual query construction:
+
+* Point-and-click filters
+* Join visualization
+* Aggregation helpers
+* Live preview of generated FQLdt
+
+=== Data Entry
+
+Form-based data entry:
+
+* Validation feedback before submission
+* Constraint explanations in plain English
+* Provenance tracking (who added what, when, why)
+* RATIONALE prompts for audit compliance
+
+=== Proof Assistant
+
+When manual proofs are needed:
+
+* Plain English explanation of what's needed
+* Suggested fixes
+* One-click proof tactics
+* "I don't know" option with guidance
+
+== Target Users
+
+|===
+| User Type | Pain Point | Studio Solution
+
+| Journalists
+| Need audit trails, don't know FQL
+| Visual evidence entry with PROMPT scores
+
+| Researchers
+| Want reproducibility proofs
+| Automatic provenance tracking
+
+| Compliance Officers
+| Need reversibility guarantees
+| Visual correction workflow with proofs
+
+| Developers
+| Learning curve for dependent types
+| Gradual complexity revelation
+|===
+
+== Technology Stack
+
+|===
+| Component | Technology | Rationale
+
+| Desktop App
+| Tauri 2.0
+| Cross-platform (Mac, Windows, Linux), Rust backend
+
+| Frontend UI
+| ReScript
+| Type-safe, compiles to JS, React-like
+
+| Runtime
+| Deno
+| No npm, secure by default
+
+| Type Checker
+| Lean 4 (via FQLdt)
+| Best IDE support, proof automation
+
+| Database
+| FormDB
+| Narrative-first, reversible, audit-grade
+|===
+
+== Development
+
+=== Prerequisites
+
+* Rust (for Tauri)
+* Deno (for build tooling)
+* Lean 4 (for FQLdt type checking)
+
+=== Setup
+
+[source,bash]
+----
+# Clone
+git clone https://github.com/hyperpolymath/formdb-studio
+cd formdb-studio
+
+# Install dependencies
+just setup
+
+# Development mode
+just dev
+
+# Build for production
+just build
+----
+
+=== Project Structure
+
+[source,text]
+----
+formdb-studio/
+├── src-tauri/           # Rust backend (Tauri)
+│   ├── src/
+│   │   ├── main.rs      # Entry point
+│   │   ├── commands.rs  # Tauri commands
+│   │   └── fqldt.rs     # FQLdt integration
+│   └── Cargo.toml
+├── src/                 # ReScript frontend
+│   ├── App.res          # Main app
+│   ├── SchemaBuilder.res
+│   ├── QueryBuilder.res
+│   ├── DataEntry.res
+│   └── ProofAssistant.res
+├── deno.json            # Deno config
+├── rescript.json        # ReScript config
+├── justfile             # Build commands
+└── README.adoc
+----
+
+== Roadmap
+
+=== Phase 1: Schema Builder (MVP)
+
+* [ ] Visual collection creator
+* [ ] Field type picker with constraints
+* [ ] FQLdt code generation
+* [ ] Basic proof automation
+
+=== Phase 2: Query Builder
+
+* [ ] Visual query construction
+* [ ] Filter/join visualization
+* [ ] Result preview
+* [ ] Query history
+
+=== Phase 3: Data Entry
+
+* [ ] Form-based entry
+* [ ] Validation feedback
+* [ ] Provenance prompts
+* [ ] Bulk import
+
+=== Phase 4: Advanced Features
+
+* [ ] Proof assistant with plain English
+* [ ] Navigation path builder
+* [ ] Multi-user collaboration
+* [ ] Export to standard formats
+
+== Related Projects
+
+* https://github.com/hyperpolymath/formdb[FormDB] - The narrative-first database
+* https://github.com/hyperpolymath/fqldt[FQLdt] - Dependently-typed Form Query Language
+* https://github.com/hyperpolymath/bofig[BoFIG] - Binary-Origami Figuration (journalism use case)
+
+== License
+
+AGPL-3.0-or-later
