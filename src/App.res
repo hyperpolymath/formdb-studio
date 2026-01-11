@@ -38,45 +38,124 @@ module Collection = {
 
 // Tauri command bindings
 module Tauri = {
+  type invokeResult<'a>
+
   @module("@tauri-apps/api/core")
   external invoke: (string, 'a) => promise<'b> = "invoke"
 }
 
-// Generate FQLdt from collection definition
-let generateFqldt = async (collection: Collection.t) => {
-  let payload = {
-    "name": collection.name,
-    "fields": collection.fields->Array.map(f => {
-      let (min, max, required) = switch f.fieldType {
-      | Number({min, max}) => (min, max, false)
-      | Text({required}) => (None, None, required)
-      | _ => (None, None, false)
-      }
-      {
-        "name": f.name,
-        "field_type": f.fieldType->FieldType.toString,
-        "min": min,
-        "max": max,
-        "required": required,
-      }
-    }),
-  }
-  await Tauri.invoke("generate_fqldt", {"collection": payload})
+// Validation result from Rust backend
+type validationResult = {
+  valid: bool,
+  errors: array<string>,
+  proofs_generated: array<string>,
 }
 
-// Main App component (placeholder)
+// Generate FQLdt from collection definition
+let generateFqldt = async (collection: Collection.t): result<string, string> => {
+  try {
+    let payload = {
+      "name": collection.name,
+      "fields": collection.fields->Array.map(f => {
+        let (min, max, required) = switch f.fieldType {
+        | FieldType.Number({min, max}) => (min, max, false)
+        | FieldType.Text({required}) => (None, None, required)
+        | _ => (None, None, false)
+        }
+        {
+          "name": f.name,
+          "field_type": f.fieldType->FieldType.toString,
+          "min": min,
+          "max": max,
+          "required": required,
+        }
+      }),
+    }
+    let result = await Tauri.invoke("generate_fqldt", {"collection": payload})
+    Ok(result)
+  } catch {
+  | Exn.Error(e) => Error(Exn.message(e)->Option.getOr("Unknown error"))
+  }
+}
+
+// Validate FQLdt code
+let validateFqldt = async (code: string): result<validationResult, string> => {
+  try {
+    let result = await Tauri.invoke("validate_fqldt", {"code": code})
+    Ok(result)
+  } catch {
+  | Exn.Error(e) => Error(Exn.message(e)->Option.getOr("Unknown error"))
+  }
+}
+
+// Main App component
 @react.component
 let make = () => {
+  let (collection, setCollection) = React.useState(() => Collection.empty())
+  let (validationState, setValidationState) = React.useState(() => FqldtPreview.NotValidated)
+
+  let handleUpdateName = name => {
+    setCollection(prev => {...prev, name})
+  }
+
+  let handleAddField = (field: Field.t) => {
+    setCollection(prev => {
+      ...prev,
+      fields: prev.fields->Array.concat([field]),
+    })
+  }
+
+  let handleRemoveField = index => {
+    setCollection(prev => {
+      ...prev,
+      fields: prev.fields->Array.filterWithIndex((_, i) => i != index),
+    })
+  }
+
+  // Auto-validate when collection changes
+  React.useEffect1(() => {
+    if collection.name != "" && Array.length(collection.fields) > 0 {
+      setValidationState(_ => FqldtPreview.Validating)
+
+      let _ = generateFqldt(collection)->Promise.then(result => {
+        switch result {
+        | Ok(code) =>
+          validateFqldt(code)->Promise.then(validResult => {
+            switch validResult {
+            | Ok(r) =>
+              if r.valid {
+                setValidationState(_ => FqldtPreview.Valid(r.proofs_generated))
+              } else {
+                setValidationState(_ => FqldtPreview.Invalid(r.errors))
+              }
+            | Error(e) => setValidationState(_ => FqldtPreview.Invalid([e]))
+            }
+            Promise.resolve()
+          })
+        | Error(e) =>
+          setValidationState(_ => FqldtPreview.Invalid([e]))
+          Promise.resolve()
+        }
+      })->ignore
+    } else {
+      setValidationState(_ => FqldtPreview.NotValidated)
+    }
+    None
+  }, [collection])
+
   <div className="formdb-studio">
     <header>
-      <h1>{React.string("FormDB Studio")}</h1>
-      <p>{React.string("Zero-friction interface for dependently-typed databases")}</p>
+      <h1> {React.string("FormDB Studio")} </h1>
+      <p> {React.string("Zero-friction interface for dependently-typed databases")} </p>
     </header>
     <main>
-      <section className="schema-builder">
-        <h2>{React.string("Create Collection")}</h2>
-        <p>{React.string("Schema builder UI coming soon...")}</p>
-      </section>
+      <SchemaBuilder
+        collection
+        onUpdateName={handleUpdateName}
+        onAddField={handleAddField}
+        onRemoveField={handleRemoveField}
+      />
+      <FqldtPreview collection validationState />
     </main>
   </div>
 }

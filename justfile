@@ -8,20 +8,32 @@ default:
 # Setup development environment
 setup:
     @echo "Setting up FormDB Studio..."
+    deno cache src/main.tsx
     cd src-tauri && cargo build
-    deno cache src/main.ts
+    just rescript-build
+
+# Build ReScript files
+rescript-build:
+    deno run -A npm:rescript build
+
+# Watch ReScript files
+rescript-watch:
+    deno run -A npm:rescript build -w
+
+# Bundle frontend for production
+bundle:
+    just rescript-build
+    deno run -A npm:esbuild src/main.tsx --bundle --outfile=dist/app.js --format=esm --jsx=automatic --loader:.js=jsx
 
 # Development mode with hot reload
 dev:
+    just bundle
     cargo tauri dev
 
 # Build for production
 build:
+    just bundle
     cargo tauri build
-
-# Run ReScript compiler in watch mode
-rescript-watch:
-    deno run -A npm:rescript build -w
 
 # Type check Lean 4 proofs
 check-proofs:
@@ -29,15 +41,15 @@ check-proofs:
 
 # Format code
 fmt:
-    deno fmt src/
+    deno fmt src/*.tsx
     cd src-tauri && cargo fmt
 
 # Lint
 lint:
-    deno lint src/
     cd src-tauri && cargo clippy
 
 # Clean build artifacts
 clean:
-    rm -rf build/
+    rm -rf dist/app.js
+    rm -rf src/*.res.js
     cd src-tauri && cargo clean

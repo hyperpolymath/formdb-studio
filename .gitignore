@@ -1,7 +1,10 @@
 # Build artifacts
-/dist
 /build
 /target
+
+# Generated bundle (but keep dist/index.html and dist/styles.css)
+/dist/app.js
+/dist/app.js.map
 
 # Tauri
 /src-tauri/target
