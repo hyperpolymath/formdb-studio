@@ -287,7 +287,8 @@ formdb-studio/
 * https://github.com/hyperpolymath/formdb/blob/main/spec/self-normalizing.adoc[FormDB Self-Normalizing] - Automatic FD discovery and proof-carrying schema evolution
 * https://github.com/hyperpolymath/fqldt[FQLdt] - Dependently-typed Form Query Language
 * https://github.com/hyperpolymath/fqldt/blob/main/spec/normalization-types.md[FQLdt Normalization Types] - Type-encoded functional dependencies and normal forms
-* https://github.com/hyperpolymath/bofig[BoFIG] - Binary-Origami Figuration (journalism use case)
+* https://github.com/hyperpolymath/bofig[BoFIG] - Evidence graph for investigative journalism
+* https://github.com/hyperpolymath/zotero-formdb[Zotero-FormDB] - Production pilot: reference manager with PROMPT scores
 
 == License
 
