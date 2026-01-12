@@ -7,7 +7,7 @@
     (version "0.1.0")
     (schema-version "1.0")
     (created "2025-01-11")
-    (updated "2026-01-12T17:45:00Z")
+    (updated "2026-01-12T21:30:00Z")
     (project "formbd-studio")
     (repo "https://github.com/hyperpolymath/formbd-studio"))
 
@@ -213,4 +213,12 @@
         "Feature availability badges (Schema [OK], Query [ ])"
         "Color-coded status bar (green=ready, yellow=partial, indigo=loading)"
         "Pushed all changes to GitHub (commits: e64a91d, f7d86fd)"
-        "Completed comprehensive error handling milestone"))))
+        "Completed comprehensive error handling milestone"))
+    (snapshot "2026-01-12T21:30:00Z"
+      (accomplishments
+        "Complete rebrand: FormDB -> FormBD, FQL/FQLdt -> FBQL/FBQLdt"
+        "Updated 24 files across codebase (configs, source, docs, SCM)"
+        "Renamed FqldtPreview.res -> FbqldtPreview.res"
+        "Verified ReScript and Rust builds pass"
+        "Committed and pushed rebrand (commit: 3526112)"
+        "GitHub repo still named formdb-studio (manual rename pending)"))))
