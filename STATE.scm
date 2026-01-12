@@ -7,7 +7,7 @@
     (version "0.1.0")
     (schema-version "1.0")
     (created "2025-01-11")
-    (updated "2026-01-12T22:00:00Z")
+    (updated "2026-01-12T23:00:00Z")
     (project "formbd-studio")
     (repo "https://github.com/hyperpolymath/formbd-studio"))
 
@@ -60,6 +60,8 @@
     (working-features
       "ReScript UI component structure"
       "Tab navigation (Schema/Query/Data/Proofs/Normalize)"
+      "Keyboard shortcuts (Ctrl/Cmd+1-5 for tab switching)"
+      "localStorage persistence (collections auto-save/load)"
       "Field type system (Number, Text, Confidence, PromptScores)"
       "Tauri command definitions (10 commands)"
       "Schema types in Rust (FieldDef, CollectionDef, etc.)"
@@ -230,4 +232,10 @@
         "Updated Exn.Error/message -> JsExn/JsExn.message"
         "Build now compiles warning-free"
         "Verified app launch with cargo tauri dev"
-        "Pushed all fixes to GitHub (commits: f389b90)"))))
+        "Pushed all fixes to GitHub (commits: f389b90)"))
+    (snapshot "2026-01-12T23:00:00Z"
+      (accomplishments
+        "Added keyboard navigation (Ctrl/Cmd+1-5 for tab switching)"
+        "Added localStorage persistence for collections"
+        "Collections auto-save on change and auto-load on startup"
+        "Pushed to GitHub (commit: ac0bcdd)"))))
