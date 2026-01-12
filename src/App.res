@@ -49,7 +49,7 @@ let generateFbqldt = async (collection: Collection.t): result<string, string> =>
     let result = await Tauri.invoke("generate_fbqldt", {"collection": payload})
     Ok(result)
   } catch {
-  | Exn.Error(e) => Error(Exn.message(e)->Option.getOr("Unknown error"))
+  | JsExn(e) => Error(JsExn.message(e)->Option.getOr("Unknown error"))
   }
 }
 
@@ -59,7 +59,7 @@ let validateFbqldt = async (code: string): result<validationResult, string> => {
     let result = await Tauri.invoke("validate_fbqldt", {"code": code})
     Ok(result)
   } catch {
-  | Exn.Error(e) => Error(Exn.message(e)->Option.getOr("Unknown error"))
+  | JsExn(e) => Error(JsExn.message(e)->Option.getOr("Unknown error"))
   }
 }
 

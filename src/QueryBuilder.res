@@ -224,7 +224,7 @@ module QueryResults = {
   type resultState =
     | NoResults
     | Loading
-    | Success(array<Js.Dict.t<string>>)
+    | Success(array<dict<string>>)
     | Error(string)
 
   @react.component
@@ -250,7 +250,7 @@ module QueryResults = {
             <p> {React.string("No matching documents")} </p>
           </div>
         } else {
-          let headers = rows[0]->Option.mapOr([], Js.Dict.keys)
+          let headers = rows[0]->Option.mapOr([], Dict.keysToArray)
           <div className="results-table-wrapper">
             <table className="results-table">
               <thead>
@@ -266,7 +266,7 @@ module QueryResults = {
                   <tr key={Int.toString(i)}>
                     {headers
                     ->Array.map(h => {
-                      let value = row->Js.Dict.get(h)->Option.getOr("")
+                      let value = row->Dict.get(h)->Option.getOr("")
                       <td key={h}> {React.string(value)} </td>
                     })
                     ->React.array}
@@ -326,7 +326,7 @@ let make = (~collections: array<Collection.t>) => {
     setResults(_ => QueryResults.Loading)
     // TODO: Call Tauri command to execute query
     // For now, simulate with placeholder
-    let _ = Js.Global.setTimeout(() => {
+    let _ = setTimeout(() => {
       setResults(_ => QueryResults.Success([]))
     }, 500)
   }

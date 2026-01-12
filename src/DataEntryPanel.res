@@ -11,32 +11,32 @@ module Validation = {
     | Invalid(string)
     | Warning(string)
 
-  type t = Js.Dict.t<fieldState>
+  type t = dict<fieldState>
 
-  let empty = (): t => Js.Dict.empty()
+  let empty = (): t => Dict.make()
 
   let get = (v: t, field: string): fieldState =>
-    v->Js.Dict.get(field)->Option.getOr(NotValidated)
+    v->Dict.get(field)->Option.getOr(NotValidated)
 
   let set = (v: t, field: string, state: fieldState): t => {
-    let copy = Js.Dict.fromArray(Js.Dict.entries(v))
-    copy->Js.Dict.set(field, state)
+    let copy = Dict.fromArray(Dict.toArray(v))
+    copy->Dict.set(field, state)
     copy
   }
 }
 
 // Document being entered
 module Document = {
-  type t = Js.Dict.t<string>
+  type t = dict<string>
 
-  let empty = (): t => Js.Dict.empty()
+  let empty = (): t => Dict.make()
 
   let get = (doc: t, field: string): string =>
-    doc->Js.Dict.get(field)->Option.getOr("")
+    doc->Dict.get(field)->Option.getOr("")
 
   let set = (doc: t, field: string, value: string): t => {
-    let copy = Js.Dict.fromArray(Js.Dict.entries(doc))
-    copy->Js.Dict.set(field, value)
+    let copy = Dict.fromArray(Dict.toArray(doc))
+    copy->Dict.set(field, value)
     copy
   }
 }
@@ -67,7 +67,7 @@ module FieldInput = {
     ~validation: Validation.fieldState,
     ~onChange: string => unit,
   ) => {
-    let (constraintHint, inputType, inputProps) = switch field.fieldType {
+    let (constraintHint, inputType, _inputProps) = switch field.fieldType {
     | FieldType.Number({min, max}) =>
       let hint = switch (min, max) {
       | (Some(lo), Some(hi)) => `Number between ${Int.toString(lo)} and ${Int.toString(hi)}`
@@ -280,7 +280,7 @@ let make = (~collections: array<Collection.t>) => {
     if allFieldsValid && provenance.source != "" && provenance.rationale != "" {
       setSubmission(_ => Submitting)
       // TODO: Call Tauri command to insert document
-      let _ = Js.Global.setTimeout(() => {
+      let _ = setTimeout(() => {
         setSubmission(_ => Success("Document inserted successfully with provenance tracking"))
         setDocument(_ => Document.empty())
         setValidation(_ => Validation.empty())

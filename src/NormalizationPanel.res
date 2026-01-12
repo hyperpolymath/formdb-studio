@@ -118,7 +118,7 @@ module FDVisualization = {
           </div>
           <div className="fd-meta">
             <span className="fd-confidence">
-              {React.string(`${Float.toFixedWithPrecision(fd.confidence *. 100.0, ~digits=1)}%`)}
+              {React.string(`${Float.toFixed(fd.confidence *. 100.0, ~digits=1)}%`)}
             </span>
             {if fd.discovered {
               <span className="fd-source discovered"> {React.string("discovered")} </span>
@@ -305,7 +305,7 @@ let make = (~collections: array<Collection.t>) => {
   let handleDiscoverFDs = () => {
     setDiscoveryState(_ => Discovering)
     // TODO: Call Tauri command to discover FDs
-    let _ = Js.Global.setTimeout(() => {
+    let _ = setTimeout(() => {
       setDiscoveryState(_ =>
         Discovered([
           {
@@ -360,7 +360,7 @@ let make = (~collections: array<Collection.t>) => {
       </div>
       <div className="form-group">
         <label>
-          {React.string(`Confidence threshold: ${Float.toFixedWithPrecision(confidenceThreshold *. 100.0, ~digits=0)}%`)}
+          {React.string(`Confidence threshold: ${Float.toFixed(confidenceThreshold *. 100.0, ~digits=0)}%`)}
         </label>
         <input
           type_="range"
