@@ -223,7 +223,7 @@
         "Renamed FqldtPreview.res -> FbqldtPreview.res"
         "Verified ReScript and Rust builds pass"
         "Committed and pushed rebrand (commit: 3526112)"
-        "GitHub repo still named formdb-studio (manual rename pending)"))
+        "GitHub repo renamed: formdb-studio -> formbd-studio"))
     (snapshot "2026-01-12T22:00:00Z"
       (accomplishments
         "Fixed all ReScript deprecation warnings (24 total)"
