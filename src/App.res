@@ -1,48 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // FormDB Studio - Main Application
 
-module FieldType = {
-  type t =
-    | Number({min: option<int>, max: option<int>})
-    | Text({required: bool})
-    | Confidence
-    | PromptScores
-
-  let toString = (t: t) =>
-    switch t {
-    | Number(_) => "number"
-    | Text(_) => "text"
-    | Confidence => "confidence"
-    | PromptScores => "prompt_scores"
-    }
-}
-
-module Field = {
-  type t = {
-    name: string,
-    fieldType: FieldType.t,
-  }
-}
-
-module Collection = {
-  type t = {
-    name: string,
-    fields: array<Field.t>,
-  }
-
-  let empty = () => {
-    name: "",
-    fields: [],
-  }
-}
-
-// Tauri command bindings
-module Tauri = {
-  type invokeResult<'a>
-
-  @module("@tauri-apps/api/core")
-  external invoke: (string, 'a) => promise<'b> = "invoke"
-}
+// Re-export types for backward compatibility
+module FieldType = Types.FieldType
+module Field = Types.Field
+module Collection = Types.Collection
+module Tauri = Types.Tauri
 
 // Validation result from Rust backend
 type validationResult = {
@@ -143,7 +106,7 @@ let make = () => {
   let (activeTab, setActiveTab) = React.useState(() => Schema)
   let (collections, setCollections) = React.useState(() => [])
   let (currentCollection, setCurrentCollection) = React.useState(() => Collection.empty())
-  let (validationState, setValidationState) = React.useState(() => FqldtPreview.NotValidated)
+  let (validationState, setValidationState) = React.useState(() => Types.NotValidated)
 
   // Schema builder handlers
   let handleUpdateName = name => {
@@ -168,14 +131,14 @@ let make = () => {
     if currentCollection.name != "" && Array.length(currentCollection.fields) > 0 {
       setCollections(prev => prev->Array.concat([currentCollection]))
       setCurrentCollection(_ => Collection.empty())
-      setValidationState(_ => FqldtPreview.NotValidated)
+      setValidationState(_ => Types.NotValidated)
     }
   }
 
   // Auto-validate when collection changes
   React.useEffect1(() => {
     if currentCollection.name != "" && Array.length(currentCollection.fields) > 0 {
-      setValidationState(_ => FqldtPreview.Validating)
+      setValidationState(_ => Types.Validating)
 
       let _ = generateFqldt(currentCollection)->Promise.then(result => {
         switch result {
@@ -184,21 +147,21 @@ let make = () => {
             switch validResult {
             | Ok(r) =>
               if r.valid {
-                setValidationState(_ => FqldtPreview.Valid(r.proofs_generated))
+                setValidationState(_ => Types.Valid(r.proofs_generated))
               } else {
-                setValidationState(_ => FqldtPreview.Invalid(r.errors))
+                setValidationState(_ => Types.Invalid(r.errors))
               }
-            | Error(e) => setValidationState(_ => FqldtPreview.Invalid([e]))
+            | Error(e) => setValidationState(_ => Types.Invalid([e]))
             }
             Promise.resolve()
           })
         | Error(e) =>
-          setValidationState(_ => FqldtPreview.Invalid([e]))
+          setValidationState(_ => Types.Invalid([e]))
           Promise.resolve()
         }
       })->ignore
     } else {
-      setValidationState(_ => FqldtPreview.NotValidated)
+      setValidationState(_ => Types.NotValidated)
     }
     None
   }, [currentCollection])
@@ -235,10 +198,11 @@ let make = () => {
           <FqldtPreview
             collection={currentCollection}
             validationState
+            onCreateCollection={handleCreateCollection}
           />
         </div>
       | Query => <QueryBuilder collections />
-      | DataEntry => <DataEntry collections />
+      | DataEntry => <DataEntryPanel collections />
       | ProofAssistant => <ProofAssistant />
       | Normalization => <NormalizationPanel collections />
       }}

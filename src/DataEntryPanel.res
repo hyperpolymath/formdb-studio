@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // FormDB Studio - Data Entry Component (Phase 3)
 
-open App
+open Types
 
 // Field validation state
 module Validation = {
@@ -325,17 +325,17 @@ let make = (~collections: array<Collection.t>) => {
           ->React.array}
         </div>
 
-        <ProvenanceForm provenance onChange={setProvenance} />
+        <ProvenanceForm provenance onChange={p => setProvenance(_ => p)} />
 
         {switch submission {
         | Success(msg) =>
           <div className="submission-success">
-            <span className="icon"> {React.string({js|✓|js})} </span>
+            <span className="icon"> {React.string("\u2713")} </span>
             {React.string(msg)}
           </div>
         | Failed(msg) =>
           <div className="submission-error">
-            <span className="icon"> {React.string({js|✗|js})} </span>
+            <span className="icon"> {React.string("\u2717")} </span>
             {React.string(msg)}
           </div>
         | _ => React.null

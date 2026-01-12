@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // FormDB Studio - Schema Normalization Panel (Phase 5)
 
-open App
+open Types
 
 // Functional dependency
 module FunctionalDependency = {
@@ -111,7 +111,7 @@ module FDVisualization = {
             <span className="fd-determinant">
               {React.string(`{${fd.determinant->Array.join(", ")}}`)}
             </span>
-            <span className="fd-arrow"> {React.string({js| → |js})} </span>
+            <span className="fd-arrow"> {React.string(" -> ")} </span>
             <span className="fd-dependent">
               {React.string(`{${fd.dependent->Array.join(", ")}}`)}
             </span>
@@ -176,11 +176,11 @@ module NFStatus = {
             </div>
             <div className="nf-status-icon">
               {if i < currentIndex {
-                React.string({js|✓|js})
+                React.string("\u2713")
               } else if i == currentIndex {
-                React.string({js|●|js})
+                React.string("\u25CF")
               } else {
-                React.string({js|○|js})
+                React.string("\u25CB")
               }}
             </div>
           </div>
@@ -418,7 +418,7 @@ let make = (~collections: array<Collection.t>) => {
           </div>
         } else {
           <div className="all-good">
-            <span className="icon"> {React.string({js|✓|js})} </span>
+            <span className="icon"> {React.string("\u2713")} </span>
             <p> {React.string("Your schema is already in the highest applicable normal form!")} </p>
           </div>
         }}

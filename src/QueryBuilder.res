@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // FormDB Studio - Query Builder Component (Phase 2)
 
-open App
+open Types
 
 // Query filter types
 module Filter = {
@@ -352,7 +352,7 @@ let make = (~collections: array<Collection.t>) => {
           <label> {React.string("Limit")} </label>
           <input
             type_="number"
-            value={query.limit->Option.mapOr("", Int.toString)}
+            value={query.limit->Option.mapOr("", n => Int.toString(n))}
             onChange={handleLimitChange}
             min="1"
             max="10000"
@@ -385,7 +385,7 @@ let make = (~collections: array<Collection.t>) => {
                   type_="button"
                   className="remove-btn"
                   onClick={_ => handleRemoveFilter(index)}>
-                  {React.string({js|×|js})}
+                  {React.string("\u00D7")}
                 </button>
               </div>
             )

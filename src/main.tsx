@@ -1,9 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// FormDB Studio - Entry point
+// FormDB Studio - Entry Point
 
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { make as App } from './App.res.js';
+import React from "react";
+import { createRoot } from "react-dom/client";
+// @ts-ignore - ReScript compiled module
+import { make as App } from "../lib/bs/src/App.res.js";
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
-root.render(React.createElement(App, {}));
+const container = document.getElementById("root");
+if (container) {
+  const root = createRoot(container);
+  root.render(React.createElement(App, {}));
+}

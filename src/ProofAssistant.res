@@ -88,8 +88,8 @@ module ProofExplanation = {
     }
 
     let statusText = switch obligation.status {
-    | ProofObligation.Proved => {js|✓ Proved|js}
-    | ProofObligation.Failed(reason) => {js|✗ Failed: |js} ++ reason
+    | ProofObligation.Proved => "\u2713 Proved"
+    | ProofObligation.Failed(reason) => "\u2717 Failed: " ++ reason
     | ProofObligation.NeedsHelp => "? Needs your input"
     | ProofObligation.Pending => "... Pending"
     }

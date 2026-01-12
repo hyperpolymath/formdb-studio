@@ -199,9 +199,47 @@ See https://github.com/hyperpolymath/formdb/blob/main/spec/self-normalizing.adoc
 
 === Prerequisites
 
-* Rust (for Tauri)
-* Deno (for build tooling)
-* Lean 4 (for FQLdt type checking)
+==== Required
+
+[cols="1,2,2"]
+|===
+| Tool | Version | Installation
+
+| Rust
+| stable (1.70+)
+| `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \| sh`
+
+| Node.js
+| 18+ (for npm/npx)
+| https://nodejs.org/ or `asdf install nodejs 20.10.0`
+
+| Tauri CLI
+| 2.x
+| `cargo install tauri-cli`
+|===
+
+==== Linux-Specific Dependencies
+
+On Fedora/RHEL:
+[source,bash]
+----
+sudo dnf install webkit2gtk4.1-devel gtk3-devel libsoup3-devel \
+  javascriptcore6.0-devel libadwaita-devel pango-devel cairo-devel \
+  gdk-pixbuf2-devel atk-devel librsvg2-devel
+----
+
+On Ubuntu/Debian:
+[source,bash]
+----
+sudo apt install libwebkit2gtk-4.1-dev libgtk-3-dev libsoup-3.0-dev \
+  libjavascriptcoregtk-4.1-dev libadwaita-1-dev libpango1.0-dev \
+  libcairo2-dev libgdk-pixbuf-2.0-dev libatk1.0-dev librsvg2-dev
+----
+
+==== Optional (for full functionality)
+
+* **Lean 4** (for FQLdt type checking) - https://leanprover.github.io/lean4/doc/setup.html
+* **Deno** (alternative runtime) - `curl -fsSL https://deno.land/install.sh | sh`
 
 === Setup
 
@@ -211,76 +249,127 @@ See https://github.com/hyperpolymath/formdb/blob/main/spec/self-normalizing.adoc
 git clone https://github.com/hyperpolymath/formdb-studio
 cd formdb-studio
 
-# Install dependencies
-just setup
+# Install Node dependencies (ReScript, React, esbuild)
+npm install
 
-# Development mode
-just dev
+# Build ReScript
+npx rescript build
+
+# Bundle frontend
+npx esbuild src/App.res.js --bundle --outfile=dist/app.js
+
+# Development mode (hot reload)
+cd src-tauri && cargo tauri dev
 
 # Build for production
-just build
+cd src-tauri && cargo tauri build
 ----
+
+=== Quick Start (TL;DR)
+
+[source,bash]
+----
+npm install && npx rescript build && \
+npx esbuild src/App.res.js --bundle --outfile=dist/app.js && \
+cd src-tauri && cargo tauri dev
+----
+
+=== Build Outputs
+
+After `cargo tauri build`:
+
+[cols="1,2"]
+|===
+| Format | Location
+
+| Binary
+| `src-tauri/target/release/formdb-studio`
+
+| Debian package
+| `src-tauri/target/release/bundle/deb/FormDB Studio_*.deb`
+
+| RPM package
+| `src-tauri/target/release/bundle/rpm/FormDB Studio-*.rpm`
+|===
 
 === Project Structure
 
 [source,text]
 ----
 formdb-studio/
-├── src-tauri/           # Rust backend (Tauri)
+├── src-tauri/              # Rust backend (Tauri 2.0)
 │   ├── src/
-│   │   ├── main.rs      # Entry point
-│   │   ├── commands.rs  # Tauri commands
-│   │   └── fqldt.rs     # FQLdt integration
-│   └── Cargo.toml
-├── src/                 # ReScript frontend
-│   ├── App.res          # Main app
-│   ├── SchemaBuilder.res
-│   ├── QueryBuilder.res
-│   ├── DataEntry.res
-│   └── ProofAssistant.res
-├── deno.json            # Deno config
-├── rescript.json        # ReScript config
-├── justfile             # Build commands
+│   │   └── main.rs         # Entry point + all Tauri commands
+│   ├── icons/              # App icons (indigo theme)
+│   ├── Cargo.toml          # Rust dependencies
+│   └── tauri.conf.json     # Tauri configuration
+├── src/                    # ReScript frontend
+│   ├── App.res             # Main app with navigation
+│   ├── Types.res           # Shared type definitions
+│   ├── SchemaBuilder.res   # Collection creator UI
+│   ├── FieldEditor.res     # Field type picker
+│   ├── FqldtPreview.res    # Live FQLdt code preview
+│   ├── QueryBuilder.res    # Visual query construction
+│   ├── DataEntryPanel.res  # Form-based data entry
+│   ├── ProofAssistant.res  # Proof generation UI
+│   └── NormalizationPanel.res # Schema normalization
+├── dist/                   # Build outputs
+│   ├── index.html          # Entry HTML
+│   ├── app.js              # Bundled frontend
+│   └── styles.css          # UI styles (indigo theme)
+├── package.json            # Node dependencies
+├── rescript.json           # ReScript config
+├── STATE.scm               # Project state tracking
+├── ECOSYSTEM.scm           # Ecosystem relationships
+├── META.scm                # Project metadata
 └── README.adoc
 ----
 
 == Roadmap
 
-=== Phase 1: Schema Builder (MVP)
+=== Phase 1: Schema Builder (MVP) - IN PROGRESS
 
-* [ ] Visual collection creator
-* [ ] Field type picker with constraints
-* [ ] FQLdt code generation
-* [ ] Basic proof automation
+* [x] Visual collection creator
+* [x] Field type picker with constraints
+* [x] FQLdt code generation (client-side)
+* [ ] Basic proof automation (awaiting FQLdt M5)
+* [x] Copy code to clipboard
+* [x] Create collection workflow
 
-=== Phase 2: Query Builder
+=== Phase 2: Query Builder - UI COMPLETE
 
-* [ ] Visual query construction
-* [ ] Filter/join visualization
-* [ ] Result preview
+* [x] Visual query construction UI
+* [x] Filter/join visualization
+* [ ] Result preview (awaiting FormDB M11)
 * [ ] Query history
 
-=== Phase 3: Data Entry
+=== Phase 3: Data Entry - UI COMPLETE
 
-* [ ] Form-based entry
-* [ ] Validation feedback
-* [ ] Provenance prompts
+* [x] Form-based entry UI
+* [x] Validation feedback UI
+* [x] Provenance prompts
+* [ ] Backend integration (awaiting FormDB M11)
 * [ ] Bulk import
 
 === Phase 4: Advanced Features
 
-* [ ] Proof assistant with plain English
+* [x] Proof assistant UI
 * [ ] Navigation path builder
 * [ ] Multi-user collaboration
 * [ ] Export to standard formats
 
-=== Phase 5: Schema Normalization
+=== Phase 5: Schema Normalization - UI COMPLETE
 
-* [ ] Functional dependency discovery UI
-* [ ] Normal form visualization (1NF-BCNF)
-* [ ] One-click normalization proposals
-* [ ] Schema evolution with rollback
+* [x] Functional dependency discovery UI
+* [x] Normal form visualization (1NF-BCNF)
+* [x] One-click normalization proposals UI
+* [ ] Backend integration (awaiting FormDB M11)
 * [ ] FQLdt proof integration for schema changes
+
+=== Blocking Dependencies
+
+* **FormDB M11** - HTTP API Server (required for database operations)
+* **FQLdt M5** - Zig FFI (required for real type checking)
 
 == Related Projects
 

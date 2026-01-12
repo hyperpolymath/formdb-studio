@@ -252,7 +252,7 @@ fn validate_fqldt(code: String) -> Result<ValidationResult, String> {
 
 /// Execute a query
 #[tauri::command]
-fn execute_query(query: QueryDef) -> Result<QueryResult, String> {
+fn execute_query(_query: QueryDef) -> Result<QueryResult, String> {
     // TODO: Connect to FormDB and execute query
     // For now, return placeholder
     Ok(QueryResult {
@@ -279,7 +279,7 @@ fn explain_query(query: QueryDef) -> Result<String, String> {
 
 /// Insert a document with provenance
 #[tauri::command]
-fn insert_document(doc: DocumentWithProvenance) -> Result<InsertResult, String> {
+fn insert_document(_doc: DocumentWithProvenance) -> Result<InsertResult, String> {
     // TODO: Connect to FormDB and insert
     // For now, return placeholder
     let doc_id = format!("doc_{}", uuid::Uuid::new_v4());
@@ -295,8 +295,8 @@ fn insert_document(doc: DocumentWithProvenance) -> Result<InsertResult, String> 
 /// Validate a document against schema constraints
 #[tauri::command]
 fn validate_document(
-    collection: String,
-    data: std::collections::HashMap<String, String>,
+    _collection: String,
+    _data: std::collections::HashMap<String, String>,
 ) -> Result<Vec<ConstraintViolation>, String> {
     // TODO: Validate against actual schema
     // For now, return empty (no violations)
@@ -310,8 +310,8 @@ fn validate_document(
 /// Discover functional dependencies from data
 #[tauri::command]
 fn discover_fds(
-    collection: String,
-    confidence_threshold: f64,
+    _collection: String,
+    _confidence_threshold: f64,
 ) -> Result<DiscoveryResult, String> {
     // TODO: Connect to Form.Normalizer and discover FDs
     // For now, return placeholder with example FDs
@@ -333,7 +333,7 @@ fn discover_fds(
 
 /// Apply a normalization proposal
 #[tauri::command]
-fn apply_normalization(proposal_id: String) -> Result<bool, String> {
+fn apply_normalization(_proposal_id: String) -> Result<bool, String> {
     // TODO: Apply normalization with rollback support
     Ok(true)
 }
@@ -344,14 +344,14 @@ fn apply_normalization(proposal_id: String) -> Result<bool, String> {
 
 /// Get proof obligations for a schema
 #[tauri::command]
-fn get_proof_obligations(collection: String) -> Result<Vec<ProofObligation>, String> {
+fn get_proof_obligations(_collection: String) -> Result<Vec<ProofObligation>, String> {
     // TODO: Get actual proof obligations from Lean 4
     Ok(vec![])
 }
 
 /// Apply a proof tactic
 #[tauri::command]
-fn apply_tactic(obligation_id: String, tactic: String) -> Result<bool, String> {
+fn apply_tactic(_obligation_id: String, _tactic: String) -> Result<bool, String> {
     // TODO: Apply tactic via Lean 4
     Ok(true)
 }

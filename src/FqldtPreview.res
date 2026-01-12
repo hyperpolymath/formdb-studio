@@ -1,13 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // FormDB Studio - FQLdt Preview Component
 
-open App
-
-type validationState =
-  | NotValidated
-  | Validating
-  | Valid(array<string>)
-  | Invalid(array<string>)
+open Types
 
 let fieldTypeToFqldt = (ft: FieldType.t): string => {
   switch ft {
@@ -43,9 +37,30 @@ let generateFqldtCode = (collection: Collection.t): string => {
   }
 }
 
+// Clipboard API binding
+module Clipboard = {
+  @val @scope(("navigator", "clipboard"))
+  external writeText: string => promise<unit> = "writeText"
+}
+
 @react.component
-let make = (~collection: Collection.t, ~validationState: validationState) => {
+let make = (
+  ~collection: Collection.t,
+  ~validationState: validationState,
+  ~onCreateCollection: unit => unit,
+) => {
   let code = generateFqldtCode(collection)
+  let (copied, setCopied) = React.useState(() => false)
+
+  let handleCopy = _ => {
+    Clipboard.writeText(code)->Promise.then(_ => {
+      setCopied(_ => true)
+      let _ = setTimeout(() => setCopied(_ => false), 2000)
+      Promise.resolve()
+    })->ignore
+  }
+
+  let canCreate = collection.name != "" && Array.length(collection.fields) > 0
 
   <aside className="fqldt-preview">
     <h2> {React.string("Generated FQLdt")} </h2>
@@ -60,22 +75,25 @@ let make = (~collection: Collection.t, ~validationState: validationState) => {
       </div>
     | Valid(proofs) =>
       <div className="validation-status valid">
-        <span className="icon"> {React.string({js|✓|js})} </span>
+        <span className="icon"> {React.string("\u2713")} </span>
         <span>
           {React.string(`Types verified. ${Int.toString(Array.length(proofs))} proofs generated.`)}
         </span>
       </div>
     | Invalid(errors) =>
       <div className="validation-status invalid">
-        <span className="icon"> {React.string({js|✗|js})} </span>
+        <span className="icon"> {React.string("\u2717")} </span>
         <span> {React.string(errors->Array.join(", "))} </span>
       </div>
     }}
     <div className="actions-bar">
-      <button className="btn btn-secondary">
-        {React.string("Copy Code")}
+      <button className="btn btn-secondary" onClick={handleCopy}>
+        {React.string(if copied { "Copied!" } else { "Copy Code" })}
       </button>
-      <button className="btn btn-primary">
+      <button
+        className="btn btn-primary"
+        disabled={!canCreate}
+        onClick={_ => onCreateCollection()}>
         {React.string("Create Collection")}
       </button>
     </div>

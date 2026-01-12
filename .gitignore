@@ -6,8 +6,14 @@
 /dist/app.js
 /dist/app.js.map
 
+# Node (for npm/ReScript tooling)
+node_modules/
+package-lock.json
+
 # Tauri
 /src-tauri/target
+/src-tauri/gen/
+/src-tauri/Cargo.lock
 
 # ReScript
 *.res.js

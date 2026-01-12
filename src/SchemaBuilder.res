@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // FormDB Studio - Schema Builder Component
 
-open App
+open Types
 
 @react.component
 let make = (
@@ -69,7 +69,7 @@ let make = (
                   className="remove-btn"
                   onClick={_ => onRemoveField(index)}
                   title="Remove field">
-                  {React.string({js|×|js})}
+                  {React.string("\u00D7")}
                 </button>
               </div>
             })

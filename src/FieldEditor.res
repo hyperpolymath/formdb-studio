@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // FormDB Studio - Field Editor Component
 
-open App
+open Types
 
 type fieldFormState = {
   name: string,
@@ -99,7 +99,7 @@ let make = (~onAdd: Field.t => unit) => {
             <label> {React.string("Min:")} </label>
             <input
               type_="number"
-              value={form.minValue->Option.mapOr("", Int.toString)}
+              value={form.minValue->Option.mapOr("", n => Int.toString(n))}
               onChange={updateMin}
             />
           </div>
@@ -107,7 +107,7 @@ let make = (~onAdd: Field.t => unit) => {
             <label> {React.string("Max:")} </label>
             <input
               type_="number"
-              value={form.maxValue->Option.mapOr("", Int.toString)}
+              value={form.maxValue->Option.mapOr("", n => Int.toString(n))}
               onChange={updateMax}
             />
           </div>
