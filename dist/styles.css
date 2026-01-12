@@ -1,8 +1,8 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
-/* FormDB Studio - Styles */
+/* FormBD Studio - Styles */
 
 :root {
-  /* FormDB Studio Indigo Theme */
+  /* FormBD Studio Indigo Theme */
   --bg-primary: #0f0f23;
   --bg-secondary: #1a1a3e;
   --bg-tertiary: #252560;
@@ -37,7 +37,7 @@ body {
 }
 
 /* Layout */
-.formdb-studio {
+.formbd-studio {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -293,8 +293,8 @@ main {
   font-size: 0.75rem;
 }
 
-/* FQLdt Preview */
-.fqldt-preview {
+/* FBQLdt Preview */
+.fbqldt-preview {
   flex: 0 0 400px;
   background: var(--bg-secondary);
   border-radius: var(--radius);
@@ -304,7 +304,7 @@ main {
   flex-direction: column;
 }
 
-.fqldt-preview h2 {
+.fbqldt-preview h2 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
   color: var(--text-primary);
@@ -313,7 +313,7 @@ main {
   gap: 0.5rem;
 }
 
-.fqldt-preview .code-block {
+.fbqldt-preview .code-block {
   flex: 1;
   background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(15, 15, 35, 0.95) 100%);
   border-radius: var(--radius);
@@ -327,15 +327,15 @@ main {
   border: 1px solid var(--border);
 }
 
-.fqldt-preview .code-block .keyword {
+.fbqldt-preview .code-block .keyword {
   color: var(--accent);
 }
 
-.fqldt-preview .code-block .type {
+.fbqldt-preview .code-block .type {
   color: var(--success);
 }
 
-.fqldt-preview .code-block .field-name {
+.fbqldt-preview .code-block .field-name {
   color: var(--text-primary);
 }
 
@@ -1524,7 +1524,7 @@ input[type="range"]::-webkit-slider-thumb {
     flex-direction: column;
   }
 
-  .fqldt-preview {
+  .fbqldt-preview {
     flex: none;
   }
 

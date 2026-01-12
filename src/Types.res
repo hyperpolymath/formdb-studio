@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// FormDB Studio - Shared Types
+// FormBD Studio - Shared Types
 
 module FieldType = {
   type t =
@@ -44,7 +44,7 @@ module Tauri = {
   external invoke: (string, 'a) => promise<'b> = "invoke"
 }
 
-// Validation state for FQLdt preview
+// Validation state for FBQLdt preview
 type validationState =
   | NotValidated
   | Validating
@@ -63,8 +63,8 @@ module ServiceStatus = {
 
   type featureAvailability = {
     schema_builder: bool,
-    fqldt_generation: bool,
-    fqldt_validation: bool,
+    fbqldt_generation: bool,
+    fbqldt_validation: bool,
     query_execution: bool,
     data_entry: bool,
     normalization: bool,
@@ -72,8 +72,8 @@ module ServiceStatus = {
   }
 
   type t = {
-    formdb: serviceInfo,
-    fqldt: serviceInfo,
+    formbd: serviceInfo,
+    fbqldt: serviceInfo,
     overall_ready: bool,
     features: featureAvailability,
   }

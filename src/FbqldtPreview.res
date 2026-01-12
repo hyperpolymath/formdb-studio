@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// FormDB Studio - FQLdt Preview Component
+// FormBD Studio - FBQLdt Preview Component
 
 open Types
 
-let fieldTypeToFqldt = (ft: FieldType.t): string => {
+let fieldTypeToFbqldt = (ft: FieldType.t): string => {
   switch ft {
   | Number({min: Some(min), max: Some(max)}) => `BoundedNat ${Int.toString(min)} ${Int.toString(max)}`
   | Number({min: Some(min), max: None}) => `Nat (>= ${Int.toString(min)})`
@@ -16,13 +16,13 @@ let fieldTypeToFqldt = (ft: FieldType.t): string => {
   }
 }
 
-let generateFqldtCode = (collection: Collection.t): string => {
+let generateFbqldtCode = (collection: Collection.t): string => {
   if collection.name == "" {
-    "-- Enter a collection name to see generated FQLdt"
+    "-- Enter a collection name to see generated FBQLdt"
   } else {
     let fieldsCode =
       collection.fields
-      ->Array.map(f => `  ${f.name} : ${fieldTypeToFqldt(f.fieldType)}`)
+      ->Array.map(f => `  ${f.name} : ${fieldTypeToFbqldt(f.fieldType)}`)
       ->Array.join(",\n")
 
     let fieldsSection = if Array.length(collection.fields) > 0 {
@@ -49,7 +49,7 @@ let make = (
   ~validationState: validationState,
   ~onCreateCollection: unit => unit,
 ) => {
-  let code = generateFqldtCode(collection)
+  let code = generateFbqldtCode(collection)
   let (copied, setCopied) = React.useState(() => false)
 
   let handleCopy = _ => {
@@ -62,8 +62,8 @@ let make = (
 
   let canCreate = collection.name != "" && Array.length(collection.fields) > 0
 
-  <aside className="fqldt-preview">
-    <h2> {React.string("Generated FQLdt")} </h2>
+  <aside className="fbqldt-preview">
+    <h2> {React.string("Generated FBQLdt")} </h2>
     <div className="code-block">
       <pre> {React.string(code)} </pre>
     </div>

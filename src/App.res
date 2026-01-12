@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// FormDB Studio - Main Application
+// FormBD Studio - Main Application
 
 // Re-export types for backward compatibility
 module FieldType = Types.FieldType
@@ -26,8 +26,8 @@ let checkServiceStatus = async (): option<ServiceStatus.t> => {
   }
 }
 
-// Generate FQLdt from collection definition
-let generateFqldt = async (collection: Collection.t): result<string, string> => {
+// Generate FBQLdt from collection definition
+let generateFbqldt = async (collection: Collection.t): result<string, string> => {
   try {
     let payload = {
       "name": collection.name,
@@ -46,17 +46,17 @@ let generateFqldt = async (collection: Collection.t): result<string, string> => 
         }
       }),
     }
-    let result = await Tauri.invoke("generate_fqldt", {"collection": payload})
+    let result = await Tauri.invoke("generate_fbqldt", {"collection": payload})
     Ok(result)
   } catch {
   | Exn.Error(e) => Error(Exn.message(e)->Option.getOr("Unknown error"))
   }
 }
 
-// Validate FQLdt code
-let validateFqldt = async (code: string): result<validationResult, string> => {
+// Validate FBQLdt code
+let validateFbqldt = async (code: string): result<validationResult, string> => {
   try {
-    let result = await Tauri.invoke("validate_fqldt", {"code": code})
+    let result = await Tauri.invoke("validate_fbqldt", {"code": code})
     Ok(result)
   } catch {
   | Exn.Error(e) => Error(Exn.message(e)->Option.getOr("Unknown error"))
@@ -162,10 +162,10 @@ let make = () => {
     if currentCollection.name != "" && Array.length(currentCollection.fields) > 0 {
       setValidationState(_ => Types.Validating)
 
-      let _ = generateFqldt(currentCollection)->Promise.then(result => {
+      let _ = generateFbqldt(currentCollection)->Promise.then(result => {
         switch result {
         | Ok(code) =>
-          validateFqldt(code)->Promise.then(validResult => {
+          validateFbqldt(code)->Promise.then(validResult => {
             switch validResult {
             | Ok(r) =>
               if r.valid {
@@ -188,10 +188,10 @@ let make = () => {
     None
   }, [currentCollection])
 
-  <div className="formdb-studio">
+  <div className="formbd-studio">
     <header>
       <div className="header-content">
-        <h1> {React.string("FormDB Studio")} </h1>
+        <h1> {React.string("FormBD Studio")} </h1>
         <p> {React.string("Zero-friction interface for dependently-typed databases")} </p>
       </div>
       {if Array.length(collections) > 0 {
@@ -217,7 +217,7 @@ let make = () => {
             onAddField={handleAddField}
             onRemoveField={handleRemoveField}
           />
-          <FqldtPreview
+          <FbqldtPreview
             collection={currentCollection}
             validationState
             onCreateCollection={handleCreateCollection}

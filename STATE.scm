@@ -1,5 +1,5 @@
 ; SPDX-License-Identifier: AGPL-3.0-or-later
-; FormDB Studio - Project State
+; FormBD Studio - Project State
 ; Media-Type: application/vnd.state+scm
 
 (state
@@ -8,18 +8,18 @@
     (schema-version "1.0")
     (created "2025-01-11")
     (updated "2026-01-12T17:45:00Z")
-    (project "formdb-studio")
-    (repo "https://github.com/hyperpolymath/formdb-studio"))
+    (project "formbd-studio")
+    (repo "https://github.com/hyperpolymath/formbd-studio"))
 
   (project-context
-    (name "FormDB Studio")
+    (name "FormBD Studio")
     (tagline "Zero-friction interface for dependently-typed databases")
     (tech-stack
       (frontend "ReScript")
       (backend "Rust (Tauri 2.0)")
       (runtime "Deno")
-      (type-checker "Lean 4 (via FQLdt)")
-      (database "FormDB")))
+      (type-checker "Lean 4 (via FBQLdt)")
+      (database "FormBD")))
 
   (current-position
     (phase "production-ready")
@@ -36,7 +36,7 @@
           "src/ProofAssistant.res - Proof generation UI"
           "src/NormalizationPanel.res - Schema normalization"
           "src/FieldEditor.res - Field type picker"
-          "src/FqldtPreview.res - Live FQLdt preview with copy/create buttons"
+          "src/FqldtPreview.res - Live FBQLdt preview with copy/create buttons"
           "src/Types.res - Shared types module"))
       (tauri-backend
         (status "functional")
@@ -45,14 +45,14 @@
           "src-tauri/src/main.rs - 10 Tauri commands (no unused variable warnings)"
           "src-tauri/Cargo.toml - Tauri 2.0 deps"
           "src-tauri/tauri.conf.json - App config"))
-      (fqldt-integration
+      (fbqldt-integration
         (status "not-started")
         (completion 0)
         (notes "Commands have TODO placeholders"))
-      (formdb-integration
+      (formbd-integration
         (status "not-started")
         (completion 0)
-        (notes "HTTP API not yet available in FormDB"))
+        (notes "HTTP API not yet available in FormBD"))
       (build-pipeline
         (status "complete")
         (completion 100)
@@ -68,7 +68,7 @@
 
   (route-to-mvp
     (target-version "1.0.0")
-    (definition "Working desktop app that can create schemas and query FormDB")
+    (definition "Working desktop app that can create schemas and query FormBD")
 
     (milestones
       (milestone (id "M1") (name "Build Pipeline")
@@ -82,22 +82,22 @@
           (item "Generate .deb package" status: "completed")
           (item "Generate .rpm package" status: "completed")))
 
-      (milestone (id "M2") (name "FormDB HTTP Integration")
+      (milestone (id "M2") (name "FormBD HTTP Integration")
         (status "blocked")
-        (depends-on "FormDB M11")
+        (depends-on "FormBD M11")
         (items
-          (item "Wait for FormDB HTTP API (M11)" status: "blocked")
+          (item "Wait for FormBD HTTP API (M11)" status: "blocked")
           (item "Add HTTP client to Rust backend" status: "pending")
           (item "Implement execute_query command" status: "pending")
           (item "Implement insert_document command" status: "pending")))
 
-      (milestone (id "M3") (name "FQLdt Type Checking")
+      (milestone (id "M3") (name "FBQLdt Type Checking")
         (status "blocked")
-        (depends-on "FQLdt M5")
+        (depends-on "FBQLdt M5")
         (items
-          (item "Wait for FQLdt Zig FFI (M5)" status: "blocked")
+          (item "Wait for FBQLdt Zig FFI (M5)" status: "blocked")
           (item "Add Lean 4 subprocess invocation" status: "pending")
-          (item "Implement validate_fqldt with real checks" status: "pending")
+          (item "Implement validate_fbqldt with real checks" status: "pending")
           (item "Return actual proof obligations" status: "pending")))
 
       (milestone (id "M4") (name "Normalization Features")
@@ -122,14 +122,14 @@
     (critical
       (blocker
         (id "BLOCK-001")
-        (title "Awaiting FormDB HTTP API")
-        (description "FormDB M11 (HTTP API Server) must complete before Studio can connect")
+        (title "Awaiting FormBD HTTP API")
+        (description "FormBD M11 (HTTP API Server) must complete before Studio can connect")
         (blocked-milestones "M2" "M4")))
     (high
       (blocker
         (id "BLOCK-002")
-        (title "Awaiting FQLdt Zig FFI")
-        (description "FQLdt M5 (Zig FFI) needed for real type checking")
+        (title "Awaiting FBQLdt Zig FFI")
+        (description "FBQLdt M5 (Zig FFI) needed for real type checking")
         (blocked-milestones "M3")))
     (medium)
     (low
@@ -139,11 +139,11 @@
         (description "linuxdeploy failed during AppImage creation, but deb/rpm work fine"))))
 
   (ecosystem-integration
-    (formdb-version "0.0.4")
+    (formbd-version "0.0.4")
     (fdql-dt-version "0.2.0")
     (alignment-status "awaiting-upstream")
     (integration-points
-      (formdb
+      (formbd
         "HTTP API for queries (awaiting M11)"
         "Schema metadata storage"
         "Provenance tracking"
@@ -163,8 +163,8 @@
       "Run usability testing on the UI"
       "Address ReScript deprecation warnings")
     (this-month
-      "Integrate when FormDB M11 completes"
-      "Wire up FQLdt type checking when M5 completes"))
+      "Integrate when FormBD M11 completes"
+      "Wire up FBQLdt type checking when M5 completes"))
 
   (session-history
     (snapshot "2025-01-11"
@@ -179,7 +179,7 @@
         "Created ECOSYSTEM.scm"
         "Created META.scm"
         "Documented blockers and dependencies"
-        "Aligned with unified FormDB ecosystem roadmap"))
+        "Aligned with unified FormBD ecosystem roadmap"))
     (snapshot "2026-01-12T14:30:00Z"
       (accomplishments
         "Fixed ReScript build errors (circular dependencies, Unicode syntax)"
@@ -194,7 +194,7 @@
         "Completed M1 (Build Pipeline) milestone"))
     (snapshot "2026-01-12T17:45:00Z"
       (accomplishments
-        "Created professional FormDB Studio icons (indigo theme with form fields + lambda symbol)"
+        "Created professional FormBD Studio icons (indigo theme with form fields + lambda symbol)"
         "Generated all icon sizes: 32x32, 128x128, 256x256, ICO, ICNS"
         "Successfully built production release (cargo tauri build)"
         "Generated .deb package (2.9MB)"
@@ -209,7 +209,7 @@
         "Added service status system (check_service_status, get_app_info commands)"
         "Created StatusBar.res component showing backend availability"
         "Added ServiceStatus and FeatureAvailability types to Types.res"
-        "Clear user feedback about FormDB M11 and FQLdt M5 dependencies"
+        "Clear user feedback about FormBD M11 and FBQLdt M5 dependencies"
         "Feature availability badges (Schema [OK], Query [ ])"
         "Color-coded status bar (green=ready, yellow=partial, indigo=loading)"
         "Pushed all changes to GitHub (commits: e64a91d, f7d86fd)"

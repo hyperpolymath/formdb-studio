@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// FormDB Studio - Proof Assistant Component (Phase 4)
+// FormBD Studio - Proof Assistant Component (Phase 4)
 
 // Proof obligation types
 module ProofObligation = {
@@ -206,7 +206,7 @@ module TacticReference = {
     <div className="tactic-reference">
       <h3> {React.string("Common Proof Tactics")} </h3>
       <p className="hint">
-        {React.string("These are the building blocks for proving constraints in FQLdt.")}
+        {React.string("These are the building blocks for proving constraints in FBQLdt.")}
       </p>
       <div className="tactics-list">
         {Tactic.commonTactics
@@ -284,7 +284,7 @@ let make = () => {
     <h2> {React.string("Proof Assistant")} </h2>
     <p className="section-hint">
       {React.string(
-        "FQLdt uses dependent types to verify constraints at compile time. This assistant helps you understand and resolve proof obligations.",
+        "FBQLdt uses dependent types to verify constraints at compile time. This assistant helps you understand and resolve proof obligations.",
       )}
     </p>
 

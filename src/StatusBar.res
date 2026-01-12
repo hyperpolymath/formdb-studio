@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// FormDB Studio - Status Bar Component
+// FormBD Studio - Status Bar Component
 
 open Types
 
@@ -41,9 +41,9 @@ let make = (~status: option<ServiceStatus.t>) => {
     | Some(s) =>
       <>
         <div className="service-status">
-          {renderService(s.formdb)}
+          {renderService(s.formbd)}
           <span className="separator">{React.string(" | ")}</span>
-          {renderService(s.fqldt)}
+          {renderService(s.fbqldt)}
         </div>
         <div className="feature-status">
           {if s.features.schema_builder {
@@ -58,7 +58,7 @@ let make = (~status: option<ServiceStatus.t>) => {
               {React.string("Query [OK]")}
             </span>
           } else {
-            <span className="feature disabled" title="Query execution requires FormDB">
+            <span className="feature disabled" title="Query execution requires FormBD">
               {React.string("Query [ ]")}
             </span>
           }}

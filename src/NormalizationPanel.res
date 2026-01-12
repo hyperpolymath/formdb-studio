@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// FormDB Studio - Schema Normalization Panel (Phase 5)
+// FormBD Studio - Schema Normalization Panel (Phase 5)
 
 open Types
 

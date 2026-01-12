@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 [package]
-name = "formdb-studio"
+name = "formbd-studio"
 version = "0.1.0"
-description = "Zero-friction interface for FormDB with dependently-typed FQL"
+description = "Zero-friction interface for FormBD with dependently-typed FBQL"
 authors = ["Hyperpolymath"]
 license = "AGPL-3.0-or-later"
-repository = "https://github.com/hyperpolymath/formdb-studio"
+repository = "https://github.com/hyperpolymath/formbd-studio"
 edition = "2021"
 
 [build-dependencies]

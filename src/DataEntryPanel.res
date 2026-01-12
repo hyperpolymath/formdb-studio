@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// FormDB Studio - Data Entry Component (Phase 3)
+// FormBD Studio - Data Entry Component (Phase 3)
 
 open Types
 
@@ -141,7 +141,7 @@ module ProvenanceForm = {
     <div className="provenance-form">
       <h3> {React.string("Provenance (Audit Trail)")} </h3>
       <p className="provenance-hint">
-        {React.string("FormDB tracks who added data, when, and why. This ensures audit compliance.")}
+        {React.string("FormBD tracks who added data, when, and why. This ensures audit compliance.")}
       </p>
 
       <div className="form-group">

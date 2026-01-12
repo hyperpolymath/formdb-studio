@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// FormDB Studio - Field Editor Component
+// FormBD Studio - Field Editor Component
 
 open Types
 

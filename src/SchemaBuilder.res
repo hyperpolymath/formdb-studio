@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// FormDB Studio - Schema Builder Component
+// FormBD Studio - Schema Builder Component
 
 open Types
 

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-//! FormDB Studio - Zero-friction interface for FormDB with FQLdt
+//! FormBD Studio - Zero-friction interface for FormBD with FBQLdt
 //!
-//! This is the Tauri backend that bridges the ReScript UI to FormDB.
+//! This is the Tauri backend that bridges the ReScript UI to FormBD.
 
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
@@ -14,8 +14,8 @@ use serde::{Deserialize, Serialize};
 /// Status of external service dependencies
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ServiceStatus {
-    pub formdb: ServiceInfo,
-    pub fqldt: ServiceInfo,
+    pub formbd: ServiceInfo,
+    pub fbqldt: ServiceInfo,
     pub overall_ready: bool,
     pub features: FeatureAvailability,
 }
@@ -34,8 +34,8 @@ pub struct ServiceInfo {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FeatureAvailability {
     pub schema_builder: bool,
-    pub fqldt_generation: bool,
-    pub fqldt_validation: bool,
+    pub fbqldt_generation: bool,
+    pub fbqldt_validation: bool,
     pub query_execution: bool,
     pub data_entry: bool,
     pub normalization: bool,
@@ -226,9 +226,9 @@ pub struct SuggestedFix {
 // Tauri Commands - Schema
 // ============================================================================
 
-/// Generate FQLdt code from a visual collection definition
+/// Generate FBQLdt code from a visual collection definition
 #[tauri::command]
-fn generate_fqldt(collection: CollectionDef) -> Result<String, String> {
+fn generate_fbqldt(collection: CollectionDef) -> Result<String, String> {
     let mut fql = format!(
         "CREATE COLLECTION {} (\n  id : UUID",
         collection.name
@@ -263,9 +263,9 @@ fn generate_fqldt(collection: CollectionDef) -> Result<String, String> {
     Ok(fql)
 }
 
-/// Validate FQLdt code using Lean 4 type checker
+/// Validate FBQLdt code using Lean 4 type checker
 #[tauri::command]
-fn validate_fqldt(code: String) -> Result<ValidationResult, String> {
+fn validate_fbqldt(code: String) -> Result<ValidationResult, String> {
     // TODO: Call Lean 4 via subprocess or FFI
     // For now, return a placeholder
     let proofs = if code.contains("BoundedNat") {
@@ -288,7 +288,7 @@ fn validate_fqldt(code: String) -> Result<ValidationResult, String> {
 /// Execute a query
 #[tauri::command]
 fn execute_query(_query: QueryDef) -> Result<QueryResult, String> {
-    // TODO: Connect to FormDB and execute query
+    // TODO: Connect to FormBD and execute query
     // For now, return placeholder
     Ok(QueryResult {
         rows: vec![],
@@ -315,7 +315,7 @@ fn explain_query(query: QueryDef) -> Result<String, String> {
 /// Insert a document with provenance
 #[tauri::command]
 fn insert_document(_doc: DocumentWithProvenance) -> Result<InsertResult, String> {
-    // TODO: Connect to FormDB and insert
+    // TODO: Connect to FormBD and insert
     // For now, return placeholder
     let doc_id = format!("doc_{}", uuid::Uuid::new_v4());
 
@@ -398,67 +398,67 @@ fn apply_tactic(_obligation_id: String, _tactic: String) -> Result<bool, String>
 /// Check availability of backend services
 #[tauri::command]
 fn check_service_status() -> ServiceStatus {
-    // Check FormDB availability
-    let formdb = check_formdb_status();
+    // Check FormBD availability
+    let formbd = check_formbd_status();
 
-    // Check FQLdt availability
-    let fqldt = check_fqldt_status();
+    // Check FBQLdt availability
+    let fbqldt = check_fbqldt_status();
 
     // Determine which features are available
     let features = FeatureAvailability {
-        // Schema builder works offline (generates FQLdt code locally)
+        // Schema builder works offline (generates FBQLdt code locally)
         schema_builder: true,
-        // FQLdt code generation works offline
-        fqldt_generation: true,
-        // Validation requires FQLdt/Lean 4
-        fqldt_validation: fqldt.available,
-        // Query execution requires FormDB
-        query_execution: formdb.available,
-        // Data entry requires FormDB
-        data_entry: formdb.available,
-        // Normalization requires FormDB
-        normalization: formdb.available,
-        // Proof assistant requires FQLdt
-        proof_assistant: fqldt.available,
+        // FBQLdt code generation works offline
+        fbqldt_generation: true,
+        // Validation requires FBQLdt/Lean 4
+        fbqldt_validation: fbqldt.available,
+        // Query execution requires FormBD
+        query_execution: formbd.available,
+        // Data entry requires FormBD
+        data_entry: formbd.available,
+        // Normalization requires FormBD
+        normalization: formbd.available,
+        // Proof assistant requires FBQLdt
+        proof_assistant: fbqldt.available,
     };
 
-    let overall_ready = formdb.available && fqldt.available;
+    let overall_ready = formbd.available && fbqldt.available;
 
     ServiceStatus {
-        formdb,
-        fqldt,
+        formbd,
+        fbqldt,
         overall_ready,
         features,
     }
 }
 
-/// Check FormDB HTTP API availability
-fn check_formdb_status() -> ServiceInfo {
-    // TODO: Actually ping FormDB when M11 is released
+/// Check FormBD HTTP API availability
+fn check_formbd_status() -> ServiceInfo {
+    // TODO: Actually ping FormBD when M11 is released
     // For now, return unavailable with informative message
     ServiceInfo {
-        name: "FormDB".to_string(),
+        name: "FormBD".to_string(),
         available: false,
         version: None,
-        message: "FormDB HTTP API not yet available. \
+        message: "FormBD HTTP API not yet available. \
                   Query execution, data entry, and normalization features \
-                  will be enabled when FormDB M11 is released.".to_string(),
-        blocking_milestone: Some("FormDB M11".to_string()),
+                  will be enabled when FormBD M11 is released.".to_string(),
+        blocking_milestone: Some("FormBD M11".to_string()),
     }
 }
 
-/// Check FQLdt/Lean 4 availability
-fn check_fqldt_status() -> ServiceInfo {
-    // TODO: Check for Lean 4 binary and FQLdt package
+/// Check FBQLdt/Lean 4 availability
+fn check_fbqldt_status() -> ServiceInfo {
+    // TODO: Check for Lean 4 binary and FBQLdt package
     // For now, return unavailable with informative message
     ServiceInfo {
-        name: "FQLdt (Lean 4)".to_string(),
+        name: "FBQLdt (Lean 4)".to_string(),
         available: false,
         version: None,
-        message: "FQLdt type checker not yet integrated. \
+        message: "FBQLdt type checker not yet integrated. \
                   Type validation and proof generation will be enabled \
-                  when FQLdt M5 (Zig FFI) is released.".to_string(),
-        blocking_milestone: Some("FQLdt M5".to_string()),
+                  when FBQLdt M5 (Zig FFI) is released.".to_string(),
+        blocking_milestone: Some("FBQLdt M5".to_string()),
     }
 }
 
@@ -466,11 +466,11 @@ fn check_fqldt_status() -> ServiceInfo {
 #[tauri::command]
 fn get_app_info() -> AppInfo {
     AppInfo {
-        name: "FormDB Studio".to_string(),
+        name: "FormBD Studio".to_string(),
         version: env!("CARGO_PKG_VERSION").to_string(),
-        description: "Zero-friction interface for FormDB with dependently-typed FQL".to_string(),
+        description: "Zero-friction interface for FormBD with dependently-typed FQL".to_string(),
         license: "AGPL-3.0-or-later".to_string(),
-        repository: "https://github.com/hyperpolymath/formdb-studio".to_string(),
+        repository: "https://github.com/hyperpolymath/formbd-studio".to_string(),
     }
 }
 
@@ -495,8 +495,8 @@ fn main() {
             check_service_status,
             get_app_info,
             // Schema
-            generate_fqldt,
-            validate_fqldt,
+            generate_fbqldt,
+            validate_fbqldt,
             // Query
             execute_query,
             explain_query,
@@ -511,5 +511,5 @@ fn main() {
             apply_tactic,
         ])
         .run(tauri::generate_context!())
-        .expect("error while running FormDB Studio");
+        .expect("error while running FormBD Studio");
 }

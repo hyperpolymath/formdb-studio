@@ -1,12 +1,12 @@
 ; SPDX-License-Identifier: AGPL-3.0-or-later
-; FormDB Ecosystem - Unified Roadmap to MVP 1.0.0
+; FormBD Ecosystem - Unified Roadmap to MVP 1.0.0
 ; Media-Type: application/vnd.roadmap+scm
 ;
-; This file is distributed to all FormDB ecosystem repos:
-; - formdb (core database)
+; This file is distributed to all FormBD ecosystem repos:
+; - formbd (core database)
 ; - fdql-dt (dependently-typed query language)
-; - formdb-studio (GUI)
-; - formdb-debugger (recovery tool)
+; - formbd-studio (GUI)
+; - formbd-debugger (recovery tool)
 
 (unified-roadmap
   (metadata
@@ -21,7 +21,7 @@
   ;; ============================================================================
   (ecosystem-summary
     (components
-      (formdb
+      (formbd
         (version "0.0.4")
         (completion 70)
         (role "Core database engine")
@@ -31,12 +31,12 @@
         (completion 65)
         (role "Dependently-typed query language")
         (tech "Lean 4 + Zig"))
-      (formdb-studio
+      (formbd-studio
         (version "0.1.0")
         (completion 45)
         (role "Zero-friction GUI")
         (tech "ReScript + Tauri 2.0 + Rust"))
-      (formdb-debugger
+      (formbd-debugger
         (version "0.1.0")
         (completion 55)
         (role "Proof-carrying recovery tool")
@@ -44,21 +44,21 @@
 
     (architecture
       "┌─────────────────────────────────────────────────────────────┐"
-      "│  FormDB Studio (GUI)                                        │"
-      "│    ↓ generates FQLdt code                                   │"
+      "│  FormBD Studio (GUI)                                        │"
+      "│    ↓ generates FBQLdt code                                   │"
       "├─────────────────────────────────────────────────────────────┤"
-      "│  FQLdt (Lean 4)                                             │"
+      "│  FBQLdt (Lean 4)                                             │"
       "│    ↓ compiles to proof blobs                                │"
       "├─────────────────────────────────────────────────────────────┤"
       "│  Form.Bridge (Zig ABI)                                      │"
       "│    ↓ calls                                                  │"
       "├─────────────────────────────────────────────────────────────┤"
-      "│  FormDB Core (Forth + Factor)                               │"
+      "│  FormBD Core (Forth + Factor)                               │"
       "│    Form.Runtime → Form.Normalizer → Form.Model → Form.Blocks│"
       "├─────────────────────────────────────────────────────────────┤"
-      "│  FormDB Debugger (alongside)                                │"
+      "│  FormBD Debugger (alongside)                                │"
       "│    ↓ proves recovery safe                                   │"
-      "│  FormDB + FQLdt                                             │"
+      "│  FormBD + FBQLdt                                             │"
       "└─────────────────────────────────────────────────────────────┘"))
 
   ;; ============================================================================
@@ -67,19 +67,19 @@
   (critical-path
     (phase (id "P1") (name "Core Integration")
       (duration "weeks 1-6")
-      (focus "FormDB + FQLdt integration")
+      (focus "FormBD + FBQLdt integration")
 
-      (formdb-tasks
+      (formbd-tasks
         (task "Complete M11: HTTP API Server" priority: critical status: in-progress)
         (task "Expose Form.Bridge FFI for proof verification" priority: high status: pending)
         (task "Add CBOR proof blob acceptance in query path" priority: high status: pending))
 
       (fdql-dt-tasks
         (task "M5: Zig FFI bridge to Form.Bridge" priority: critical status: not-started)
-        (task "M6: FQL parser (integrate with FormDB's EBNF)" priority: high status: not-started)
+        (task "M6: FBQL parser (integrate with FormBD's EBNF)" priority: high status: not-started)
         (task "Proof blob serialization (CBOR RFC 8949)" priority: high status: pending))
 
-      (checkpoint "FQLdt can compile a query → proof blob → FormDB accepts and executes"))
+      (checkpoint "FBQLdt can compile a query → proof blob → FormBD accepts and executes"))
 
     (phase (id "P2") (name "User-Facing Tools")
       (duration "weeks 7-10")
@@ -87,13 +87,13 @@
 
       (studio-tasks
         (task "Verify ReScript/Tauri build pipeline" priority: critical status: pending)
-        (task "Wire ReScript UI to FQLdt code generation" priority: high status: pending)
-        (task "Connect to FormDB HTTP API" priority: high status: blocked)
+        (task "Wire ReScript UI to FBQLdt code generation" priority: high status: pending)
+        (task "Connect to FormBD HTTP API" priority: high status: blocked)
         (task "Test schema creation → query → results flow" priority: medium status: pending))
 
       (debugger-tasks
         (task "Wire Idris REPL to PostgreSQL adapter" priority: high status: pending)
-        (task "FormDB adapter: parse real journal files" priority: high status: partial)
+        (task "FormBD adapter: parse real journal files" priority: high status: partial)
         (task "Complete Ratatui TUI interface" priority: medium status: in-progress)
         (task "Integration: proof verification before recovery" priority: medium status: pending))
 
@@ -116,20 +116,20 @@
   ;; DEPENDENCY GRAPH
   ;; ============================================================================
   (dependencies
-    (formdb-m11
-      (name "FormDB HTTP API Server")
-      (blocks "Studio M2" "Debugger FormDB adapter")
+    (formbd-m11
+      (name "FormBD HTTP API Server")
+      (blocks "Studio M2" "Debugger FormBD adapter")
       (priority critical))
 
     (fdql-dt-m5
-      (name "FQLdt Zig FFI Bridge")
+      (name "FBQLdt Zig FFI Bridge")
       (blocks "Studio M3" "Real type checking")
-      (depends-on "FormDB Form.Bridge")
+      (depends-on "FormBD Form.Bridge")
       (priority critical))
 
     (fdql-dt-m6
-      (name "FQLdt FQL Parser")
-      (blocks "Full FQLdt compilation")
+      (name "FBQLdt FBQL Parser")
+      (blocks "Full FBQLdt compilation")
       (depends-on "fdql-dt-m5")
       (priority high))
 
@@ -148,17 +148,17 @@
   ;; ============================================================================
   (decisions-needed
     (decision (id "DECISION-002")
-      (title "FQLdt parser approach")
+      (title "FBQLdt parser approach")
       (repo "fdql-dt")
       (options
         "Hand-rolled parser (simple, no deps)"
         "Lean 4 Parsec (built-in)"
-        "Integrate with FormDB's Factor-based FDQL parser")
-      (recommendation "Integrate - reuse FormDB's EBNF grammar via FFI")
+        "Integrate with FormBD's Factor-based FDQL parser")
+      (recommendation "Integrate - reuse FormBD's EBNF grammar via FFI")
       (impact "Affects M6 implementation"))
 
     (decision (id "DECISION-003")
-      (title "FormDB integration strategy for FQLdt")
+      (title "FormBD integration strategy for FBQLdt")
       (repo "fdql-dt")
       (options
         "Mock Forth core for MVP"
@@ -180,7 +180,7 @@
     (release (version "1.2.0") (name "Multi-Database Support")
       (features
         "Debugger: SQLite adapter completion"
-        "FormDB: clustering/replication (Form.ControlPlane begins)"
+        "FormBD: clustering/replication (Form.ControlPlane begins)"
         "Studio: connection manager for multiple DBs"))
 
     (release (version "2.0.0") (name "Agentic Ecosystem")
@@ -196,7 +196,7 @@
   (success-metrics
     (mvp-criteria
       "User can create a schema in Studio with visual builder"
-      "Schema generates valid FQLdt with type checking"
+      "Schema generates valid FBQLdt with type checking"
       "User can insert data with provenance tracking"
       "User can query data and see results"
       "Debugger can analyze schema and propose fixes"

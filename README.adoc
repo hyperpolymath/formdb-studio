@@ -1,7 +1,7 @@
 image:[License,link="https://github.com/hyperpolymath/palimpsest-license"]
 
 // SPDX-License-Identifier: PMPL-1.0
-// SPDX-FileCopyrightText: 2025 hyperpolymath= FormDB Studio
+// SPDX-FileCopyrightText: 2025 hyperpolymath= FormBD Studio
 :toc: macro
 :toc-title: Contents
 :toclevels: 3
@@ -10,7 +10,7 @@ image:[License,link="https://github.com/hyperpolymath/palimpsest-license"]
 image:https://img.shields.io/badge/Stage-Development-orange.svg[Stage]
 
 [.lead]
-*Zero-friction interface for FormDB with dependently-typed FQL.*
+*Zero-friction interface for FormBD with dependently-typed FBQL.*
 
 Making verified, audit-grade databases accessible to everyone—even Apple users.
 
@@ -18,15 +18,15 @@ toc::[]
 
 == Overview
 
-FormDB Studio is a graphical interface that lets non-technical users create and query FormDB databases using FQLdt (dependently-typed FormDB Query Language) without needing to understand dependent types, proofs, or Lean 4.
+FormBD Studio is a graphical interface that lets non-technical users create and query FormBD databases using FBQLdt (dependently-typed FormBD Query Language) without needing to understand dependent types, proofs, or Lean 4.
 
 === The Problem
 
-FQLdt provides compile-time verification of database constraints:
+FBQLdt provides compile-time verification of database constraints:
 
-[source,fql]
+[source,fbql]
 ----
--- FQLdt: Requires understanding dependent types
+-- FBQLdt: Requires understanding dependent types
 CREATE COLLECTION evidence (
   prompt_score : BoundedNat 0 100,  -- Type carries proof
   rationale : NonEmptyString        -- Can't be empty
@@ -41,12 +41,12 @@ WITH_PROOF { score_valid: by omega };  -- What's omega?!
 
 === The Solution
 
-FormDB Studio provides a visual interface:
+FormBD Studio provides a visual interface:
 
 [source,text]
 ----
 ┌─────────────────────────────────────────────────────────────┐
-│  FormDB Studio                                    [_][□][×] │
+│  FormBD Studio                                    [_][□][×] │
 ├─────────────────────────────────────────────────────────────┤
 │  📁 New Collection                                          │
 │  ┌───────────────────────────────────────────────────────┐  │
@@ -70,26 +70,26 @@ FormDB Studio provides a visual interface:
 └─────────────────────────────────────────────────────────────┘
 ----
 
-**Behind the scenes**: Studio generates FQLdt with proofs automatically.
+**Behind the scenes**: Studio generates FBQLdt with proofs automatically.
 
 == Architecture
 
 [source,text]
 ----
 ┌─────────────────────────────────────────────────────────────┐
-│  FormDB Studio (This Project)                               │
+│  FormBD Studio (This Project)                               │
 │  ├── Tauri 2.0 (Rust) - Cross-platform desktop app          │
 │  ├── ReScript UI - Type-safe reactive interface             │
 │  └── Visual builders for schemas, queries, data entry,      │
 │      and schema normalization                               │
 ├─────────────────────────────────────────────────────────────┤
-│  FQLdt (github.com/hyperpolymath/fqldt)                     │
+│  FBQLdt (github.com/hyperpolymath/fbqldt)                     │
 │  ├── Lean 4 type checker                                    │
 │  ├── Proof generation (incl. normalization proofs)          │
 │  ├── Normalization types (FunDep, 1NF-BCNF)                 │
-│  └── FQL code generation                                    │
+│  └── FBQL code generation                                    │
 ├─────────────────────────────────────────────────────────────┤
-│  FormDB (github.com/hyperpolymath/formdb)                   │
+│  FormBD (github.com/hyperpolymath/formbd)                   │
 │  ├── Form.Normalizer (Factor + Lean 4) - FD discovery       │
 │  ├── Form.Bridge (Zig) - Bidirectional ABI                  │
 │  ├── Form.Model (Forth) - Multi-model layer                 │
@@ -115,7 +115,7 @@ Visual query construction:
 * Point-and-click filters
 * Join visualization
 * Aggregation helpers
-* Live preview of generated FQLdt
+* Live preview of generated FBQLdt
 
 === Data Entry
 
@@ -145,7 +145,7 @@ Self-normalizing database features:
 * Proof-carrying schema evolution with rollback
 * "What's wrong with my schema?" in plain English
 
-See https://github.com/hyperpolymath/formdb/blob/main/spec/self-normalizing.adoc[FormDB Self-Normalizing Spec] and https://github.com/hyperpolymath/fqldt/blob/main/spec/normalization-types.md[FQLdt Normalization Types].
+See https://github.com/hyperpolymath/formbd/blob/main/spec/self-normalizing.adoc[FormBD Self-Normalizing Spec] and https://github.com/hyperpolymath/fbqldt/blob/main/spec/normalization-types.md[FBQLdt Normalization Types].
 
 == Target Users
 
@@ -153,7 +153,7 @@ See https://github.com/hyperpolymath/formdb/blob/main/spec/self-normalizing.adoc
 | User Type | Pain Point | Studio Solution
 
 | Journalists
-| Need audit trails, don't know FQL
+| Need audit trails, don't know FBQL
 | Visual evidence entry with PROMPT scores
 
 | Researchers
@@ -187,11 +187,11 @@ See https://github.com/hyperpolymath/formdb/blob/main/spec/self-normalizing.adoc
 | No npm, secure by default
 
 | Type Checker
-| Lean 4 (via FQLdt)
+| Lean 4 (via FBQLdt)
 | Best IDE support, proof automation
 
 | Database
-| FormDB
+| FormBD
 | Narrative-first, reversible, audit-grade
 |===
 
@@ -238,7 +238,7 @@ sudo apt install libwebkit2gtk-4.1-dev libgtk-3-dev libsoup-3.0-dev \
 
 ==== Optional (for full functionality)
 
-* **Lean 4** (for FQLdt type checking) - https://leanprover.github.io/lean4/doc/setup.html
+* **Lean 4** (for FBQLdt type checking) - https://leanprover.github.io/lean4/doc/setup.html
 * **Deno** (alternative runtime) - `curl -fsSL https://deno.land/install.sh | sh`
 
 === Setup
@@ -246,8 +246,8 @@ sudo apt install libwebkit2gtk-4.1-dev libgtk-3-dev libsoup-3.0-dev \
 [source,bash]
 ----
 # Clone
-git clone https://github.com/hyperpolymath/formdb-studio
-cd formdb-studio
+git clone https://github.com/hyperpolymath/formbd-studio
+cd formbd-studio
 
 # Install Node dependencies (ReScript, React, esbuild)
 npm install
@@ -283,20 +283,20 @@ After `cargo tauri build`:
 | Format | Location
 
 | Binary
-| `src-tauri/target/release/formdb-studio`
+| `src-tauri/target/release/formbd-studio`
 
 | Debian package
-| `src-tauri/target/release/bundle/deb/FormDB Studio_*.deb`
+| `src-tauri/target/release/bundle/deb/FormBD Studio_*.deb`
 
 | RPM package
-| `src-tauri/target/release/bundle/rpm/FormDB Studio-*.rpm`
+| `src-tauri/target/release/bundle/rpm/FormBD Studio-*.rpm`
 |===
 
 === Project Structure
 
 [source,text]
 ----
-formdb-studio/
+formbd-studio/
 ├── src-tauri/              # Rust backend (Tauri 2.0)
 │   ├── src/
 │   │   └── main.rs         # Entry point + all Tauri commands
@@ -308,7 +308,7 @@ formdb-studio/
 │   ├── Types.res           # Shared type definitions
 │   ├── SchemaBuilder.res   # Collection creator UI
 │   ├── FieldEditor.res     # Field type picker
-│   ├── FqldtPreview.res    # Live FQLdt code preview
+│   ├── FqldtPreview.res    # Live FBQLdt code preview
 │   ├── QueryBuilder.res    # Visual query construction
 │   ├── DataEntryPanel.res  # Form-based data entry
 │   ├── ProofAssistant.res  # Proof generation UI
@@ -331,8 +331,8 @@ formdb-studio/
 
 * [x] Visual collection creator
 * [x] Field type picker with constraints
-* [x] FQLdt code generation (client-side)
-* [ ] Basic proof automation (awaiting FQLdt M5)
+* [x] FBQLdt code generation (client-side)
+* [ ] Basic proof automation (awaiting FBQLdt M5)
 * [x] Copy code to clipboard
 * [x] Create collection workflow
 
@@ -340,7 +340,7 @@ formdb-studio/
 
 * [x] Visual query construction UI
 * [x] Filter/join visualization
-* [ ] Result preview (awaiting FormDB M11)
+* [ ] Result preview (awaiting FormBD M11)
 * [ ] Query history
 
 === Phase 3: Data Entry - UI COMPLETE
@@ -348,7 +348,7 @@ formdb-studio/
 * [x] Form-based entry UI
 * [x] Validation feedback UI
 * [x] Provenance prompts
-* [ ] Backend integration (awaiting FormDB M11)
+* [ ] Backend integration (awaiting FormBD M11)
 * [ ] Bulk import
 
 === Phase 4: Advanced Features
@@ -363,23 +363,23 @@ formdb-studio/
 * [x] Functional dependency discovery UI
 * [x] Normal form visualization (1NF-BCNF)
 * [x] One-click normalization proposals UI
-* [ ] Backend integration (awaiting FormDB M11)
-* [ ] FQLdt proof integration for schema changes
+* [ ] Backend integration (awaiting FormBD M11)
+* [ ] FBQLdt proof integration for schema changes
 
 === Blocking Dependencies
 
-* **FormDB M11** - HTTP API Server (required for database operations)
-* **FQLdt M5** - Zig FFI (required for real type checking)
+* **FormBD M11** - HTTP API Server (required for database operations)
+* **FBQLdt M5** - Zig FFI (required for real type checking)
 
 == Related Projects
 
-* https://github.com/hyperpolymath/formdb[FormDB] - The narrative-first database
-* https://github.com/hyperpolymath/formdb/blob/main/spec/self-normalizing.adoc[FormDB Self-Normalizing] - Automatic FD discovery and proof-carrying schema evolution
-* https://github.com/hyperpolymath/fqldt[FQLdt] - Dependently-typed Form Query Language
-* https://github.com/hyperpolymath/fqldt/blob/main/spec/normalization-types.md[FQLdt Normalization Types] - Type-encoded functional dependencies and normal forms
+* https://github.com/hyperpolymath/formbd[FormBD] - The narrative-first database
+* https://github.com/hyperpolymath/formbd/blob/main/spec/self-normalizing.adoc[FormBD Self-Normalizing] - Automatic FD discovery and proof-carrying schema evolution
+* https://github.com/hyperpolymath/fbqldt[FBQLdt] - Dependently-typed Form Query Language
+* https://github.com/hyperpolymath/fbqldt/blob/main/spec/normalization-types.md[FBQLdt Normalization Types] - Type-encoded functional dependencies and normal forms
 * https://github.com/hyperpolymath/bofig[BoFIG] - Evidence graph for investigative journalism
-* https://github.com/hyperpolymath/zotero-formdb[Zotero-FormDB] - Production pilot: reference manager with PROMPT scores
-* https://github.com/hyperpolymath/formdb-debugger[FormDB Debugger] - Proof-carrying database debugger (Lean 4 + Idris 2)
+* https://github.com/hyperpolymath/zotero-formbd[Zotero-FormBD] - Production pilot: reference manager with PROMPT scores
+* https://github.com/hyperpolymath/formbd-debugger[FormBD Debugger] - Proof-carrying database debugger (Lean 4 + Idris 2)
 * https://github.com/hyperpolymath/formbase[FormBase] - Open-source Airtable alternative with provenance
 
 == License

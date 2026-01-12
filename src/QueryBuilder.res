@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// FormDB Studio - Query Builder Component (Phase 2)
+// FormBD Studio - Query Builder Component (Phase 2)
 
 open Types
 

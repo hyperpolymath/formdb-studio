@@ -1,10 +1,10 @@
 ; SPDX-License-Identifier: AGPL-3.0-or-later
-; FormDB Studio - Meta Information
+; FormBD Studio - Meta Information
 ; Media-Type: application/vnd.meta+scm
 
 (meta
   (version "1.0")
-  (name "formdb-studio")
+  (name "formbd-studio")
   (governance "hyperpolymath")
 
   (architecture-decisions
@@ -18,7 +18,7 @@
       (consequences
         "Smaller bundle size than Electron"
         "Native performance for type checking calls"
-        "Rust backend can integrate with FormDB's Zig bridge"
+        "Rust backend can integrate with FormBD's Zig bridge"
         "ReScript/JS frontend provides reactive UI"))
 
     (adr
@@ -36,11 +36,11 @@
 
     (adr
       (id "ADR-003")
-      (title "Generate FQLdt from visual builder")
+      (title "Generate FBQLdt from visual builder")
       (status accepted)
       (date "2025-01-11")
       (context "Users shouldn't need to understand dependent types")
-      (decision "Visual builders generate FQLdt code automatically")
+      (decision "Visual builders generate FBQLdt code automatically")
       (consequences
         "Users get verification benefits without learning Lean 4"
         "Advanced users can see/edit generated code"
@@ -88,15 +88,15 @@
   (design-rationale
     (why-tauri
       "Electron too heavy (200MB+ bundles)"
-      "Need Rust for calling FormDB's Zig FFI"
+      "Need Rust for calling FormBD's Zig FFI"
       "Tauri 2.0 has mobile support for future iOS/Android")
     (why-rescript
       "TypeScript banned per RSR"
       "ReScript provides sound type system"
       "Better React integration than Reason")
     (why-desktop-first
-      "Web requires server-side FormDB deployment"
-      "Desktop can embed FormDB locally"
+      "Web requires server-side FormBD deployment"
+      "Desktop can embed FormBD locally"
       "Mobile via Tauri 2.0 after desktop MVP")
     (why-proof-hiding
       "Target users are journalists/researchers, not type theorists"

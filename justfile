@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-# FormDB Studio - Build commands
+# FormBD Studio - Build commands
 
 # Default recipe
 default:
@@ -7,7 +7,7 @@ default:
 
 # Setup development environment
 setup:
-    @echo "Setting up FormDB Studio..."
+    @echo "Setting up FormBD Studio..."
     deno cache src/main.tsx
     cd src-tauri && cargo build
     just rescript-build
@@ -37,7 +37,7 @@ build:
 
 # Type check Lean 4 proofs
 check-proofs:
-    cd ../fqldt && lake build
+    cd ../fbqldt && lake build
 
 # Format code
 fmt:

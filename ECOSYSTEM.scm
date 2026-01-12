@@ -1,15 +1,15 @@
 ; SPDX-License-Identifier: AGPL-3.0-or-later
-; FormDB Studio - Ecosystem Position
+; FormBD Studio - Ecosystem Position
 ; Media-Type: application/vnd.ecosystem+scm
 
 (ecosystem
   (version "1.0")
-  (name "formdb-studio")
+  (name "formbd-studio")
   (type "application")
-  (purpose "Zero-friction GUI for FormDB with dependently-typed FQL")
+  (purpose "Zero-friction GUI for FormBD with dependently-typed FBQL")
 
   (position-in-ecosystem
-    (role "User-facing GUI for FormDB ecosystem")
+    (role "User-facing GUI for FormBD ecosystem")
     (layer "Application layer")
     (users
       "Journalists - Visual evidence entry with PROMPT scores"
@@ -18,9 +18,9 @@
       "Developers - Learning dependent types through gradual revelation"))
 
   (related-projects
-    (project "formdb"
+    (project "formbd"
       (relationship sibling-standard)
-      (url "https://github.com/hyperpolymath/formdb")
+      (url "https://github.com/hyperpolymath/formbd")
       (description "The narrative-first database that Studio provides a GUI for")
       (integration
         "HTTP API for queries and mutations"
@@ -36,9 +36,9 @@
         "Proof generation for schema changes"
         "PROMPT score type safety (BoundedNat 0 100)"))
 
-    (project "formdb-debugger"
+    (project "formbd-debugger"
       (relationship sibling-standard)
-      (url "https://github.com/hyperpolymath/formdb-debugger")
+      (url "https://github.com/hyperpolymath/formbd-debugger")
       (description "Proof-carrying database recovery tool")
       (integration
         "Studio can launch Debugger for recovery operations"
@@ -50,9 +50,9 @@
       (description "Evidence graph for investigative journalism")
       (integration "Primary use case for PROMPT scores and evidence tracking"))
 
-    (project "zotero-formdb"
+    (project "zotero-formbd"
       (relationship potential-consumer)
-      (url "https://github.com/hyperpolymath/zotero-formdb")
+      (url "https://github.com/hyperpolymath/zotero-formbd")
       (description "Reference manager with PROMPT scores")
       (integration "Production pilot for refinement types"))
 
@@ -75,8 +75,8 @@
       (integration "All UI components written in ReScript")))
 
   (what-this-is
-    "A zero-friction GUI for creating and querying FormDB databases"
-    "A visual FQLdt generator that hides dependent type complexity"
+    "A zero-friction GUI for creating and querying FormBD databases"
+    "A visual FBQLdt generator that hides dependent type complexity"
     "A schema builder with automatic proof generation"
     "A normalization assistant with plain English explanations"
     "A provenance-aware data entry interface"
@@ -84,6 +84,6 @@
 
   (what-this-is-not
     "Not a general-purpose database GUI"
-    "Not a replacement for command-line FQL"
+    "Not a replacement for command-line FBQL"
     "Not a web application (desktop only for now)"
     "Not a collaboration platform (single-user focus for MVP)"))
